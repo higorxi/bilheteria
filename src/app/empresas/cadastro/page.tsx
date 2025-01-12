@@ -29,7 +29,7 @@ export default function CadastroEmpresaPage() {
         <h1 className="text-3xl font-bold mb-6">Cadastro de Empresa</h1>
         <form onSubmit={handleSubmit} className="max-w-md space-y-4">
           <div>
-            <label htmlFor="name" className="block mb-2">Nome da Empresa</label>
+            <label htmlFor="name" className="block mb-2">Nome da Empresa 123</label>
             <Input
               id="name"
               type="text"
