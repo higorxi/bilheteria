@@ -1,7 +1,9 @@
+import { BuyTicketForm } from '@/components/BuyTicketForm'
 import { Header } from '@/components/Header'
 import { prisma } from '@/lib/prisma'
+
 import { notFound } from 'next/navigation'
-import { BuyTicketForm } from './BuyTicketForm'
+
 
 async function getEvent(id: string) {
   const event = await prisma.event.findUnique({

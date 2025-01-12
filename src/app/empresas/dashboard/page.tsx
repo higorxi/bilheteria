@@ -2,16 +2,35 @@ import { Header } from '@/components/Header'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 
-async function getCompanyEvents(companyId: string) {
+// Tipos para Tickets e Eventos
+type Ticket = {
+  id: string
+  type: string
+  price: number
+  quantity: number
+}
+
+type Event = {
+  id: string
+  name: string
+  date: string
+  location: string
+  isPrivate: boolean
+  tickets: Ticket[]
+}
+
+// Função para obter eventos de uma empresa com tipagem
+async function getCompanyEvents(companyId: string): Promise<Event[]> {
   return await prisma.event.findMany({
     where: { companyId },
-    include: { tickets: true }
+    include: { tickets: true },
   })
 }
 
+// Página do dashboard da empresa
 export default async function DashboardEmpresaPage() {
   // TODO: Obter o ID da empresa autenticada
-  const companyId = 'company_id_here'
+  const companyId: string = 'company_id_here'
   const events = await getCompanyEvents(companyId)
 
   return (
@@ -37,7 +56,10 @@ export default async function DashboardEmpresaPage() {
                   </li>
                 ))}
               </ul>
-              <Link href={`/empresas/eventos/${event.id}/editar`} className="btn btn-secondary mt-2">
+              <Link
+                href={`/empresas/eventos/${event.id}/editar`}
+                className="btn btn-secondary mt-2"
+              >
                 Editar Evento
               </Link>
             </div>
@@ -47,4 +69,3 @@ export default async function DashboardEmpresaPage() {
     </div>
   )
 }
-

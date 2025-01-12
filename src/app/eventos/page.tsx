@@ -2,15 +2,31 @@ import { Header } from '@/components/Header'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 
-async function getEvents() {
+// Tipos para a empresa e eventos
+type Company = {
+  id: string
+  name: string
+}
+
+type Event = {
+  id: string
+  name: string
+  date: string
+  location: string
+  company: Company
+}
+
+// Função para buscar eventos com tipagem
+async function getEvents(): Promise<Event[]> {
   return await prisma.event.findMany({
     where: { isPrivate: false },
-    include: { company: true }
+    include: { company: true },
   })
 }
 
+// Página de eventos disponíveis
 export default async function EventosPage() {
-  const events = await getEvents()
+  const events: Event[] = await getEvents()
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -19,7 +35,11 @@ export default async function EventosPage() {
         <h1 className="text-3xl font-bold mb-6">Eventos Disponíveis</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {events.map((event) => (
-            <Link href={`/eventos/${event.id}`} key={event.id} className="border rounded-lg p-4 hover:shadow-lg transition">
+            <Link
+              href={`/eventos/${event.id}`}
+              key={event.id}
+              className="border rounded-lg p-4 hover:shadow-lg transition"
+            >
               <h2 className="text-xl font-semibold">{event.name}</h2>
               <p className="text-gray-600">{new Date(event.date).toLocaleDateString()}</p>
               <p className="text-gray-600">{event.location}</p>
@@ -31,4 +51,3 @@ export default async function EventosPage() {
     </div>
   )
 }
-
